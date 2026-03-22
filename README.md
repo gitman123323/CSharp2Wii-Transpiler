@@ -4,7 +4,9 @@
 
 WiiSharp is a C# → C transpiler that lets you write Wii homebrew games and applications using familiar C# syntax, with full IntelliSense support in Visual Studio. No C knowledge required.
 
-Here is a video showcasing what it is → [![WiiSharp Demo](https://img.youtube.com/vi/Lnt3TYKxFVA/0.jpg)](https://youtu.be/Lnt3TYKxFVA)
+Here is a video showcasing what it is ⬇
+
+[![WiiSharp Demo](https://img.youtube.com/vi/Lnt3TYKxFVA/0.jpg)](https://youtu.be/Lnt3TYKxFVA)
 
 ---
 
