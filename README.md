@@ -35,7 +35,7 @@ while (true)
 }
 ```
 
-WiiSharp transpiles it to native C, you compile the C file with devkitPPC, it produces a `.dol` file that you can run on real Wii hardware at full native speed without ever touching C code at all.
+WiiSharp transpiles it to native C, you compile the C file with devkitPPC, and then it produces a `.dol` file that you can run on real Wii hardware at full native speed without ever touching C code at all.
 
 ---
 
