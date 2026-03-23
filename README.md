@@ -78,6 +78,7 @@ WiiSharp transpiles it to native C, you compile the C file with devkitPPC, and t
 - Timing functions
 - Extension detection (Nunchuk, Classic Controller)
 - Math functions (Abs, Min, Max, Sqrt, Floor, Ceil)
+- **Motion Plus gyroscope** (GyroX, GyroY, GyroZ) — requires patched Docker image
 
 ---
 
@@ -87,6 +88,38 @@ WiiSharp transpiles it to native C, you compile the C file with devkitPPC, and t
 - **.NET 8 SDK** or later
 - **Docker Desktop** with the devkitPPC image
 - **Visual Studio 2022** (recommended for IntelliSense)
+
+---
+
+## Motion Plus Support
+
+WiiSharp includes full Motion Plus gyroscope support via `WiiSys.EnableMotionPlus()`, `WiiSys.HasMotionPlus()` and `WiiSys.GyroX/Y/Z()`. This was made possible by fixing 4 bugs in libogc that prevented Motion Plus from ever working in any Wii homebrew application since it was first added in 2009.
+
+However since the fixes require a patched version of libogc, Motion Plus only works with a special Docker image. The standard devkitPPC image will not work for Motion Plus features.
+
+**To use Motion Plus:**
+
+1. Pull the patched Docker image instead of the standard devkitPPC one:
+```bash
+docker pull gitman123323/wiisharp-libogc-patched
+```
+2. Use it exactly like the regular devkitPPC image for building
+3. Motion Plus API will work automatically
+
+**Motion Plus API:**
+```csharp
+WiiSys.EnableMotionPlus(1);  // call once at startup
+
+// every frame:
+if (WiiSys.HasMotionPlus(1))
+{
+    float pitch = WiiSys.GyroX(1);
+    float roll  = WiiSys.GyroY(1);
+    float yaw   = WiiSys.GyroZ(1);
+}
+```
+
+A pull request fixing these bugs has been submitted to libogc2. Once merged, the standard devkitPPC image will work for Motion Plus without needing the patched image.
 
 ---
 
@@ -214,6 +247,15 @@ This is the recommended way to add support for features like TV audio, SD card a
 | `WiiSys.TiltZ(player)` | Accelerometer yaw |
 | `WiiSys.GetExtension(player)` | Detect connected extension |
 
+### Motion Plus
+| Method | Description |
+|--------|-------------|
+| `WiiSys.EnableMotionPlus(player)` | Enable Motion Plus detection |
+| `WiiSys.HasMotionPlus(player)` | Returns true if Motion Plus is connected |
+| `WiiSys.GyroX(player)` | Gyroscope pitch |
+| `WiiSys.GyroY(player)` | Gyroscope roll |
+| `WiiSys.GyroZ(player)` | Gyroscope yaw |
+
 ### Rumble & Feedback
 | Method | Description |
 |--------|-------------|
@@ -240,7 +282,7 @@ WiiExtension.None, Nunchuk, Classic
 
 ## Current State & Roadmap
 
-WiiSharp currently provides full access to everything you need to start building real text-based Wii homebrew games and applications — input, display, rumble, IR, tilt, nunchuk, timing, math and more. This is a solid foundation for any 2D game or interactive application.
+WiiSharp currently provides full access to everything you need to start building real text-based Wii homebrew games and applications — input, display, rumble, IR, tilt, nunchuk, Motion Plus gyroscope, timing, math and more. This is a solid foundation for any 2D game or interactive application.
 
 The following features are **not yet implemented** but are planned or open for community contribution:
 
@@ -248,7 +290,6 @@ The following features are **not yet implemented** but are planned or open for c
 - **TV audio** — playing sound files through the TV speakers via ASND
 - **SD card support** — reading and writing files from an SD card
 - **OS operations** — file system access, memory management
-- **Motion Plus gyroscope** — currently broken at the libogc level, may be revisited in a future version
 
 Since WiiSharp is fully open source, you are welcome and encouraged to extend it however you like — add new API functions, improve the transpiler, add new language features or implement any of the above. The source code is included and well structured so adding new `WiiSys` functions is straightforward.
 
@@ -258,7 +299,6 @@ More features may be added in future versions. If you build something cool with 
 
 ## Known Limitations
 
-- **Motion Plus** — Not supported. The gyroscope data is broken at the libogc level and cannot be fixed without rewriting parts of the library.
 - **Wiimote speaker** — Not supported. libogc's speaker implementation is broken and does not produce reliable audio.
 - **Single-level inheritance only** — `A : B` works, `A : B : C` does not.
 - **No generics** — Use arrays instead of `List<T>`.
