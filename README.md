@@ -117,13 +117,9 @@ if (WiiSys.HasMotionPlus(1))
     float roll  = WiiSys.GyroY(1);
     float yaw   = WiiSys.GyroZ(1);
 }
-```
-
-A pull request fixing these bugs has been submitted to libogc2. Once merged, the standard devkitPPC image will work for Motion Plus without needing the patched image.
-
----
 
 ## Project Structure
+
 ```
 WiiSharp/
 ├── Transpiler/                    ← WiiSharp transpiler (Visual Studio project)
